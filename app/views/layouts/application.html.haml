@@ -1,0 +1,9 @@
+!!!
+%html
+  %head
+    %title Cubic
+    = stylesheet_link_tag    "application"
+    = csrf_meta_tags
+  %body
+    = yield
+    = javascript_include_tag "application"
