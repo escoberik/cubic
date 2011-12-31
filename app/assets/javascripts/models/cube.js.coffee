@@ -1,0 +1,1 @@
+Cubic.Models.Cube = Backbone.Model.extend()

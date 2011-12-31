@@ -1,3 +1,58 @@
 // Place all the styles related to the games controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+} 
+
+.cubic-board {
+  width:  240px;
+  height: 480px;
+  border: solid 1px black;
+  margin: 40px auto;
+  line-height: 0;
+  overflow: hidden;
+  position: relative;
+
+  .cubic-wrapper {
+    height: 520px;
+    position: absolute;
+    top: 0;
+
+    .cubic-slot {
+      display: inline-block;
+      width: 38px;
+      height: 38px;
+      border: solid #fff 1px;
+
+      &.empty {
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: #666;
+      }
+    }
+  }
+
+  .cubic-gameover {
+    width: 240px;
+    position: absolute;
+    font-size: 70px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    top: 80px;
+    z-index: 2;
+    line-height: 2;
+    font-family: comic Sans MS;
+    text-shadow:
+    	1px 1px 0 #CCC,
+    	2px 2px 0 #CCC, /* end of 2 level deep grey shadow */
+    	3px 3px 0 #444,
+    	4px 4px 0 #444,
+    	5px 5px 0 #444,
+    	6px 6px 0 #444; /* end of 4 level deep dark shadow */;
+  }
+}
