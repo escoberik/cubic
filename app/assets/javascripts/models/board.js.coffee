@@ -1,4 +1,7 @@
 Cubic.Models.Board = Backbone.Model.extend
+  defaults:
+    score: 0
+
   initialize: ->
     _.bindAll this
     @marker = new Cubic.Models.Marker(this)
@@ -35,6 +38,7 @@ Cubic.Models.Board = Backbone.Model.extend
         @cubes[row][col]   = false
         @cubes[row][col+1] = false
         @cubes[row][col+2] = false
+        @set(score: @get('score')+1)
         @fillBlankSpaces()
 
   checkColumn: (col) ->
@@ -48,6 +52,7 @@ Cubic.Models.Board = Backbone.Model.extend
         @cubes[row][col] = false
         @cubes[row+1][col] = false
         @cubes[row+2][col] = false
+        @set(score: @get('score')+1)
         @fillBlankSpaces()
 
   fillBlankSpaces: ->

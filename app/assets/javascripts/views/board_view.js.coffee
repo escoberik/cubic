@@ -9,6 +9,7 @@ Cubic.Views.BoardView = Backbone.View.extend
 
     @renderBoard()
     @renderCubes()
+    @renderScore()
     @renderMarker()
     @bindKeys()
     @startClock()
@@ -51,6 +52,14 @@ Cubic.Views.BoardView = Backbone.View.extend
     $('<div />')
       .addClass('cubic-cube')
       .addClass('cubic-cube-'+cube.get('color'))
+
+  renderScore: ->
+    @score = JST['score_box']()
+    $(@el).before(@score)
+    @board.bind 'change:score', @updateScore
+
+  updateScore: ->
+    $('.cubic-score-value').text(@board.get('score'))
 
   renderMarker: ->
     @marker = $('<div />').addClass('cubic-marker')

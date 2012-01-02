@@ -79,3 +79,12 @@
     	6px 6px 0 #444;
   }
 }
+
+.cubic-score-box {
+  float: right;
+  padding-right: 100px;
+
+  .cubic-score-value {
+    text-align: right;
+  }
+}
