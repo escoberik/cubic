@@ -32,6 +32,8 @@ Cubic.Views.BoardView = Backbone.View.extend
       .addClass('cubic-column-'+col)
 
   renderCubes: ->
+    return @gameOver()  if @board.isGameOver()
+
     for row in [0..12]
       for col in [0..5]
         slot = @slotAt(row, col)
@@ -54,12 +56,12 @@ Cubic.Views.BoardView = Backbone.View.extend
   update: ->
     while @gear_position >= 40
       @gear_position -= 40
-
       @board.generateNewLine()
-      return @gameOver()  if @board.isGameOver()
       @renderCubes()
+    @moveUp() unless @board.isGameOver()
 
-    @gear_position += 5
+  moveUp: ->
+    @gear_position = @gear_position + 5
     @wrapper.css 'top', -@gear_position
 
   gameOver: ->
