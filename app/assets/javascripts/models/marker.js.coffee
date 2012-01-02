@@ -1,8 +1,8 @@
 Cubic.Models.Marker = Backbone.Model.extend
   initialize: (board) ->
     @board = board
-    @row   = 5
-    @col   = 3
+    @row   = -1
+    @col   = 2
 
   moveUp: ->
     @row += 1  unless @row >= 11
