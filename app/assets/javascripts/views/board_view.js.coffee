@@ -4,69 +4,67 @@ Cubic.Views.BoardView = Backbone.View.extend
 
   initialize: (params) ->
     _.bindAll this
-    @renderBoard params['container']
-    @initCubes()
+    @board     = params['board']
+    @container = params['container']
+
+    @renderBoard()
     @renderCubes()
     @startClock()
 
-  renderBoard: (container) ->
-    $(container).html(@el)
+  renderBoard: ->
+    @renderFrame()
+    @renderSlots()
+
+  renderFrame: ->
     @wrapper = $('<div />').addClass('cubic-wrapper')
-    @wrapper_pos = 0
     $(@el).append(@wrapper)
+    @container.html @el
 
-    for y in [12..0]
-      for x in [0..5]
-        slot = $('<div />')
-          .addClass('cubic-slot')
-          .addClass('cubic-row-'+y)
-          .addClass('cubic-column-'+x)
-        @wrapper.append slot
+  renderSlots: ->
+    for row in [12..0]
+      for col in [0..5]
+        @wrapper.append @generateSlotFor(row, col)
 
+  generateSlotFor: (row, col) ->
+    $('<div />')
+      .addClass('cubic-slot')
+      .addClass('cubic-row-'+row)
+      .addClass('cubic-column-'+col)
+
+  renderCubes: ->
+    for row in [0..12]
+      for col in [0..5]
+        slot = @slotAt(row, col)
+        if @board.cubes[row][col]
+          color = @board.cubes[row][col]
+          slot.css('background', color).removeClass('empty')
+        else
+          slot.addClass 'empty'
+
+  slotAt: (row, col) ->
+    $(@el).find('.cubic-row-'+row+'.cubic-column-'+col)
 
   startClock: ->
     @clock = new Cubic.Models.Clock
       time_steps: 0.1
       callback  : @update
     @clock.start()
+    @gear_position = 0
 
   update: ->
-    @wrapper_pos += 4
-    while @wrapper_pos >= 40
-      @generateNewLine()
+    while @gear_position >= 40
+      @gear_position -= 40
+
+      @board.generateNewLine()
+      return @gameOver()  if @board.isGameOver()
       @renderCubes()
-      @wrapper_pos -= 40
-    @wrapper.css 'top', - @wrapper_pos * 1
-    for x in [0..5]
-      return @gameOver()  if @cubes[12][x]
 
-  initCubes: ->
-    @cubes = []
-    @cubes.push [false, false, false, false, false, false]  for i in [0..12]
-
-    for y in [0..6]
-      for x in [0..5]
-        @cubes[y][x] = ['red', 'blue', '#f90', 'green'].sample()
-
-  renderCubes: ->
-    for y in [0..12]
-      for x in [0..5]
-        slot = $(@el).find('.cubic-row-'+y+'.cubic-column-'+x)
-        if @cubes[y][x]
-          color = @cubes[y][x]
-          slot.css('background', color).removeClass('empty')
-        else
-          slot.addClass 'empty'
-
-  generateNewLine: ->
-    for y in [12..1]
-      for x in [0..5]
-        @cubes[y][x] = @cubes[y-1][x]
-
-    for x in [0..5]
-      @cubes[0][x] = ['red', 'blue', '#f90', 'green'].sample()
+    @gear_position += 5
+    @wrapper.css 'top', -@gear_position
 
   gameOver: ->
     @clock.stop()
-    game_over = $('<div />').text('GAME OVER').addClass('cubic-gameover')
-    $(@wrapper).before game_over
+    @renderGameOver()
+
+  renderGameOver: ->
+    $(@wrapper).before $('<div />').text('GAME OVER').addClass('cubic-gameover')
