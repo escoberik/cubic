@@ -33,6 +33,22 @@
         border: none;
         background: #666;
       }
+
+      .cubic-cube {
+        height: 38px;
+        &.cubic-cube-red {
+          background-color: red;
+        }
+        &.cubic-cube-blue {
+          background-color: blue;
+        }
+        &.cubic-cube-orange {
+          background-color: #f90;
+        }
+        &.cubic-cube-green {
+          background-color: green;
+        }
+      }
     }
   }
 

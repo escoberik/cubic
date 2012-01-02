@@ -36,12 +36,19 @@ Cubic.Views.BoardView = Backbone.View.extend
 
     for row in [0..12]
       for col in [0..5]
-        slot = @slotAt(row, col)
-        if @board.cubes[row][col]
-          color = @board.cubes[row][col]
-          slot.css('background', color).removeClass('empty')
-        else
-          slot.addClass 'empty'
+        @renderSlotAt(row, col)
+
+  renderSlotAt: (row, col) ->
+    cube = @board.cubes[row][col]
+    if cube
+      @slotAt(row, col).html(@renderCube(cube)).removeClass('empty')
+    else
+      @slotAt(row, col).html('').addClass('empty')
+
+  renderCube: (cube) ->
+    $('<div />')
+      .addClass('cubic-cube')
+      .addClass('cubic-cube-'+cube.get('color'))
 
   slotAt: (row, col) ->
     $(@el).find('.cubic-row-'+row+'.cubic-column-'+col)
