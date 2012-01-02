@@ -9,6 +9,8 @@ Cubic.Views.BoardView = Backbone.View.extend
 
     @renderBoard()
     @renderCubes()
+    @renderMarker()
+    @bindKeys()
     @startClock()
 
   renderBoard: ->
@@ -50,6 +52,16 @@ Cubic.Views.BoardView = Backbone.View.extend
       .addClass('cubic-cube')
       .addClass('cubic-cube-'+cube.get('color'))
 
+  renderMarker: ->
+    @marker = $('<div />').addClass('cubic-marker')
+    $(@wrapper).append(@marker)
+    @updateMarker()
+
+  updateMarker: ->
+    @marker.css
+      bottom: @board.marker.row* 40
+      left:   @board.marker.col * 40
+
   slotAt: (row, col) ->
     $(@el).find('.cubic-row-'+row+'.cubic-column-'+col)
 
@@ -65,10 +77,11 @@ Cubic.Views.BoardView = Backbone.View.extend
       @gear_position -= 40
       @board.generateNewLine()
       @renderCubes()
+      @updateMarker()
     @moveUp() unless @board.isGameOver()
 
   moveUp: ->
-    @gear_position = @gear_position + 5
+    @gear_position = @gear_position + 1
     @wrapper.css 'top', -@gear_position
 
   gameOver: ->
@@ -77,3 +90,21 @@ Cubic.Views.BoardView = Backbone.View.extend
 
   renderGameOver: ->
     $(@wrapper).before $('<div />').text('GAME OVER').addClass('cubic-gameover')
+
+  bindKeys: ->
+    self = this
+    marker = @board.marker
+    $(document).keydown (e) ->
+      switch e.keyCode
+        when 38
+          marker.moveUp()
+        when 40
+          marker.moveDown()
+        when 37
+          marker.moveLeft()
+        when 39
+          marker.moveRight()
+        when 32
+          marker.switch()
+          self.renderCubes()
+      self.updateMarker()

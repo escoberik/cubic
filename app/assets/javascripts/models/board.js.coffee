@@ -1,6 +1,7 @@
 Cubic.Models.Board = Backbone.Model.extend
   initialize: ->
     @initCubes()
+    @marker = new Cubic.Models.Marker(this)
 
   initCubes: ->
     @cubes = []
@@ -15,6 +16,7 @@ Cubic.Models.Board = Backbone.Model.extend
         @cubes[y][x] = @cubes[y-1][x]
     for x in [0..5]
       @cubes[0][x] = new Cubic.Models.Cube()
+    @marker.moveUp()
 
   isGameOver: ->
     for x in [0..5]
