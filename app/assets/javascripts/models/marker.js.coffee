@@ -20,4 +20,3 @@ Cubic.Models.Marker = Backbone.Model.extend
     helper = @board.cubes[@row][@col]
     @board.cubes[@row][@col] = @board.cubes[@row][@col+1]
     @board.cubes[@row][@col+1] = helper
-    @board.fillBlankSpaces()

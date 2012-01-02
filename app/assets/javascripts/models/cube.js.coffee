@@ -1,7 +1,11 @@
 Cubic.Models.Cube = Backbone.Model.extend
-  initialize: (forbidden) ->
+  defaults:
+    destroy: false
+
+  initialize: ->
     allowed = []
+    forbidden = @get('forbidden')
     $(['red', 'blue', 'orange', 'green']).each ->
       color = ''+this
       allowed.push color  if $.inArray(color, forbidden) < 0
-    @attributes['color'] = allowed.sample()
+    @set color: allowed.sample()

@@ -19,41 +19,50 @@ Cubic.Models.Board = Backbone.Model.extend
       forbidden = []
       forbidden.push @cubes[1][x].get('color')  if @cubes[1][x]
       forbidden.push @cubes[0][x-1].get('color')  if x > 0
-
-      @cubes[0][x] = new Cubic.Models.Cube(forbidden)
+      @cubes[0][x] = new Cubic.Models.Cube forbidden: forbidden
     @marker.moveUp()
 
   check: ->
+    @fillBlankSpaces()
     @checkRow(row)     for row in [1..12]
     @checkColumn(col)  for col in [0..5]
+    @clean()
+    @fillBlankSpaces()
 
   checkRow: (row) ->
     for col in [0..3]
-      return  unless @cubes[row][col] && @cubes[row][col+1] && @cubes[row][col+2]
-      color1 = @cubes[row][col].get('color')
-      color2 = @cubes[row][col+1].get('color')
-      color3 = @cubes[row][col+2].get('color')
+      cube1 = @cubes[row][col]
+      cube2 = @cubes[row][col+1]
+      cube3 = @cubes[row][col+2]
+      return  unless cube1 && cube2 && cube3
 
-      if color1 == color2 && color2 == color3
-        @cubes[row][col]   = false
-        @cubes[row][col+1] = false
-        @cubes[row][col+2] = false
-        @set(score: @get('score')+1)
-        @fillBlankSpaces()
+      if cube1.get('color') == cube2.get('color') && cube2.get('color') == cube3.get('color')
+        cube1.set destroy: true
+        cube2.set destroy: true
+        cube3.set destroy: true
 
   checkColumn: (col) ->
-    for row in [1..9]
-      return  unless @cubes[row][col] && @cubes[row+1][col] && @cubes[row+2][col]
-      color1 = @cubes[row][col].get('color')
-      color2 = @cubes[row+1][col].get('color')
-      color3 = @cubes[row+2][col].get('color')
+    for row in [1..10]
+      cube1 = @cubes[row][col]
+      cube2 = @cubes[row+1][col]
+      cube3 = @cubes[row+2][col]
+      return  unless cube1 && cube2 && cube3
 
-      if color1 == color2 && color2 == color3
-        @cubes[row][col] = false
-        @cubes[row+1][col] = false
-        @cubes[row+2][col] = false
-        @set(score: @get('score')+1)
-        @fillBlankSpaces()
+      if cube1.get('color') == cube2.get('color') && cube2.get('color') == cube3.get('color')
+        cube1.set destroy: true
+        cube2.set destroy: true
+        cube3.set destroy: true
+
+  clean: ->
+    counter = 0
+    for row in [1..12]
+      for col in [0..5]
+        if @cubes[row][col] && @cubes[row][col].get('destroy')
+          @cubes[row][col] = false
+          counter += 1
+    if counter > 0
+      @check()
+      @set score: @get('score') + counter - 2
 
   fillBlankSpaces: ->
     for row in [1..11]
