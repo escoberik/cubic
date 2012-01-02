@@ -106,5 +106,6 @@ Cubic.Views.BoardView = Backbone.View.extend
           marker.moveRight()
         when 32
           marker.switch()
+          self.board.check()
           self.renderCubes()
       self.updateMarker()
