@@ -2,20 +2,20 @@ development:
   adapter: postgresql
   host: localhost
   database: cubic
-  username: erik
-  password: 3r1k0db
+  username: jade
+  password: codigo
 
 test:
   adapter: postgresql
   host: localhost
   database: nscout_test
   template: cubic
-  username: erik
-  password: 3r1k0db
+  username: jade
+  password: codigo
 
 production:
   adapter: postgresql
   host: localhost
   database: cubic
-  username: erik
-  password: 3r1k0db
+  username: jade
+  password: codigo
