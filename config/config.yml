@@ -1,0 +1,11 @@
+common: &common
+  facebook_page: 'http://www.facebook.com/pages/Cubic/311451288899049'
+
+development:
+  <<: *common
+
+test:
+  <<: *common
+
+production:
+  <<: *common
